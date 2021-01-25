@@ -30,6 +30,18 @@ func main() {
 	const users = 10               // количество клиентов
 	const transactionsPerUser = 10 // каждый совершил в месяце транкзакций
 	const transactionAmount = 3_00 // в таком количестве
+
+	// 01.01.2020 00:00 в локальном часовом поясе
+	start := time.Date(2020, 1, 1, 0, 0, 0, 0, time.Local) // Time
+	finish := time.Date(2020, 8, 1, 0, 0, 0, 0, time.Local)
+	months := make([]int64, 0)
+	next := start
+	for next.Before(finish) {
+		months = append(months, next.Unix())
+		next = next.AddDate(0, 1, 0)
+	}
+	fmt.Printf("%#v\n", months)
+
 	transactions := make([]int64, users*transactionsPerUser)
 	for index := range transactions {
 		if index%9 == 0 {
@@ -40,6 +52,8 @@ func main() {
 			transactions[index] = transactionAmount
 		}
 	}
+
+	//stats.SumConcurrentlyMonth(start, finish)
 
 	total := int64(0)
 	const partsCount = 10
